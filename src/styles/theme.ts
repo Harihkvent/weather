@@ -1,4 +1,62 @@
-export const theme = {
+export interface Theme {
+  colors: {
+    primary: string;
+    secondary: string;
+    error: string;
+    success: string;
+    warning: string;
+    text: {
+      primary: string;
+      secondary: string;
+    };
+    background: {
+      primary: string;
+      secondary: string;
+      card: string;
+    };
+  };
+  breakpoints: {
+    mobile: string;
+    tablet: string;
+    desktop: string;
+    large: string;
+  };
+  spacing: {
+    xs: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    xxl: string;
+  };
+  animations: {
+    easeOut: string;
+    duration: string;
+  };
+  shadows: {
+    small: string;
+    medium: string;
+    large: string;
+  };
+}
+
+export const lightTheme: Theme = {
+  colors: {
+    primary: '#4a90e2',
+    secondary: '#8884d8',
+    error: '#dc3545',
+    success: '#28a745',
+    warning: '#ffc107',
+    text: {
+      primary: '#333333',
+      secondary: '#666666',
+    },
+    background: {
+      primary: '#ffffff',
+      secondary: '#f5f5f5',
+      card: '#ffffff',
+    },
+  },
   breakpoints: {
     mobile: '320px',
     tablet: '768px',
@@ -22,4 +80,29 @@ export const theme = {
     medium: '0 4px 8px rgba(0, 0, 0, 0.1)',
     large: '0 8px 16px rgba(0, 0, 0, 0.1)',
   },
-} as const;
+};
+
+export const darkTheme: Theme = {
+  ...lightTheme,
+  colors: {
+    primary: '#61dafb',
+    secondary: '#a997ff',
+    error: '#ff6b6b',
+    success: '#51cf66',
+    warning: '#ffd43b',
+    text: {
+      primary: '#e9ecef',
+      secondary: '#adb5bd',
+    },
+    background: {
+      primary: '#1a1a1a',
+      secondary: '#2d2d2d',
+      card: '#333333',
+    },
+  },
+  shadows: {
+    small: '0 2px 4px rgba(0, 0, 0, 0.3)',
+    medium: '0 4px 8px rgba(0, 0, 0, 0.3)',
+    large: '0 8px 16px rgba(0, 0, 0, 0.3)',
+  },
+};

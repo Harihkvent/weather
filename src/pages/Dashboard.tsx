@@ -11,6 +11,38 @@ import { WeatherData } from '../types/weather';
 import { googleLogout } from '@react-oauth/google';
 import { logout } from '../features/authSlice';
 
+function useGeolocation() {
+  const [location, setLocation] = useState<{ lat: number; lon: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setError('Geolocation not supported');
+      return;
+    }
+
+    let mounted = true;
+
+    const onSuccess = (pos: GeolocationPosition) => {
+      if (!mounted) return;
+      setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+    };
+
+    const onError = (err: GeolocationPositionError) => {
+      if (!mounted) return;
+      setError(err.message);
+    };
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  return { location, error };
+}
+
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -73,25 +105,36 @@ const Dashboard: React.FC = () => {
   const currentWeather = useAppSelector((state: RootState) => state.weather.currentWeather);
   const favorites = useAppSelector((state: RootState) => state.preferences.favoriteCities);
 
+  const { location: userLocation, error: locationError } = useGeolocation();
+
   useEffect(() => {
     // Function to fetch weather for all cities
     const fetchWeatherForAll = async () => {
       const uniqueCities = Array.from(new Set([...favorites]));
+      
+      const fetchPromises = [
+        // Fetch for favorite cities
+        ...uniqueCities.map(city => dispatch(fetchWeatherForCity({ city }))),
+      ];
+
+      // Add user's location if available
+      if (userLocation && !locationError) {
+        fetchPromises.push(dispatch(fetchWeatherForCity({ location: userLocation })));
+      }
+
       // Use Promise.all to fetch weather data in parallel
-      await Promise.all(
-        uniqueCities.map(city => dispatch(fetchWeatherForCity(city)))
-      );
+      await Promise.all(fetchPromises);
     };
 
     // Initial fetch
     fetchWeatherForAll();
 
-    // Set up auto-refresh every 5 minutes (300000ms) instead of every minute
+    // Set up auto-refresh every 5 minutes (300000ms)
     const refreshInterval = setInterval(fetchWeatherForAll, 300000);
 
     // Cleanup interval on unmount
     return () => clearInterval(refreshInterval);
-  }, [dispatch, favorites]);
+  }, [dispatch, favorites, userLocation, locationError]);
 
   const cities = Object.values(currentWeather) as WeatherData[];
 

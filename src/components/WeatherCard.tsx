@@ -43,6 +43,42 @@ const WeatherInfo = styled.div`
   margin-top: 1rem;
 `;
 
+const CardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ActionButton = styled.button`
+  &:first-child {
+    margin-right: 0.5rem;
+  }
+`;
+
+const AqiIndicator = styled.span<{ aqi: number }>`
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  background-color: ${({ aqi }) => {
+    if (aqi <= 50) return '#4caf50'; // Good
+    if (aqi <= 100) return '#ffeb3b'; // Moderate
+    if (aqi <= 150) return '#ff9800'; // Unhealthy for Sensitive Groups
+    if (aqi <= 200) return '#f44336'; // Unhealthy
+    if (aqi <= 300) return '#9c27b0'; // Very Unhealthy
+    return '#880e4f'; // Hazardous
+  }};
+  color: ${({ aqi }) => aqi <= 100 ? '#000' : '#fff'};
+`;
+
+const getAqiLabel = (aqi: number): string => {
+  if (aqi <= 50) return 'Good';
+  if (aqi <= 100) return 'Moderate';
+  if (aqi <= 150) return 'Unhealthy for Sensitive Groups';
+  if (aqi <= 200) return 'Unhealthy';
+  if (aqi <= 300) return 'Very Unhealthy';
+  return 'Hazardous';
+};
+
 const WeatherCard: React.FC<WeatherCardProps> = ({ weather, onClick }) => {
   const dispatch = useAppDispatch();
   const favorites = useAppSelector((state) => state.preferences.favoriteCities);
@@ -66,20 +102,20 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ weather, onClick }) => {
 
   return (
     <Card onClick={onClick} loading={loadingCities[weather.city]}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <CardHeader>
         <City>{weather.city}</City>
         <div>
-          <button onClick={toggleFavorite} style={{ marginRight: '0.5rem' }}>
+          <ActionButton onClick={toggleFavorite}>
             {isFavorite ? '★' : '☆'}
-          </button>
-          <button onClick={(e) => {
+          </ActionButton>
+          <ActionButton onClick={(e) => {
             e.stopPropagation();
             dispatch(removeCity(weather.city));
           }}>
             ✕
-          </button>
+          </ActionButton>
         </div>
-      </div>
+      </CardHeader>
       <Temperature>{Math.round(temp)}°{unit === 'fahrenheit' ? 'F' : 'C'}</Temperature>
       <img 
         src={`http://openweathermap.org/img/wn/${weather.icon}@2x.png`} 
@@ -94,9 +130,35 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ weather, onClick }) => {
         <span>💧 {weather.humidity}%</span>
         <span>💨 {weather.windSpeed} m/s</span>
       </WeatherInfo>
+      
+      {weather.airQuality && (
+        <>
+          <WeatherInfo>
+            <span>Air Quality:</span>
+            <AqiIndicator 
+              aqi={weather.airQuality.aqi}
+              title={`AQI: ${weather.airQuality.aqi} - ${getAqiLabel(weather.airQuality.aqi)}`}
+            >
+              {getAqiLabel(weather.airQuality.aqi)}
+            </AqiIndicator>
+          </WeatherInfo>
+          <WeatherInfo>
+            <span title="PM2.5">PM2.5: {weather.airQuality.pm2_5} µg/m³</span>
+            <span title="PM10">PM10: {weather.airQuality.pm10} µg/m³</span>
+          </WeatherInfo>
+        </>
+      )}
+
       {weather.precipitation > 0 && (
         <WeatherInfo>
           <span>🌧️ {weather.precipitation} mm/h</span>
+        </WeatherInfo>
+      )}
+
+      {weather.sunrise && weather.sunset && (
+        <WeatherInfo>
+          <span>🌅 {new Date(weather.sunrise * 1000).toLocaleTimeString()}</span>
+          <span>🌇 {new Date(weather.sunset * 1000).toLocaleTimeString()}</span>
         </WeatherInfo>
       )}
     </Card>

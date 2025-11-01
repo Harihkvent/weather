@@ -12,17 +12,47 @@ export const weatherApi = axios.create({
   },
 });
 
-export const fetchWeatherData = async (city: string) => {
+interface WeatherParams {
+  city?: string;
+  location?: { lat: number; lon: number };
+}
+
+export const fetchWeatherData = async ({ city, location }: WeatherParams) => {
   try {
-    const [current, forecast] = await Promise.all([
-      weatherApi.get('/weather', { params: { q: city, units: 'metric' } }),
-      weatherApi.get('/forecast', { params: { q: city, units: 'metric' } }),
+    // First get the weather data to get coordinates
+    const current = await weatherApi.get('/weather', { 
+      params: { 
+        ...(city ? { q: city } : null),
+        ...(location ? { lat: location.lat, lon: location.lon } : null),
+        units: 'metric' 
+      } 
+    });
+    
+    // Then get forecast and air quality data using the coordinates
+    const [forecast, aqi] = await Promise.all([
+      weatherApi.get('/forecast', { 
+        params: { 
+          ...(city ? { q: city } : null),
+          ...(location ? { lat: location.lat, lon: location.lon } : null),
+          units: 'metric' 
+        } 
+      }),
+      weatherApi.get('/air_pollution', { 
+        params: { 
+          lat: current.data.coord.lat, 
+          lon: current.data.coord.lon 
+        } 
+      }),
     ]);
 
     return {
       currentWeather: {
         id: current.data.id,
         city: current.data.name,
+        location: {
+          lat: current.data.coord.lat,
+          lon: current.data.coord.lon,
+        },
         temperature: current.data.main.temp,
         condition: current.data.weather[0].main,
         description: current.data.weather[0].description,
@@ -34,6 +64,17 @@ export const fetchWeatherData = async (city: string) => {
         precipitation: current.data.rain ? current.data.rain['1h'] || 0 : 0,
         uvIndex: 0, // Need to use additional API endpoint for UV index
         icon: current.data.weather[0].icon,
+        sunrise: current.data.sys.sunrise,
+        sunset: current.data.sys.sunset,
+        airQuality: {
+          aqi: aqi.data.list[0].main.aqi,
+          co: aqi.data.list[0].components.co,
+          no2: aqi.data.list[0].components.no2,
+          o3: aqi.data.list[0].components.o3,
+          pm2_5: aqi.data.list[0].components.pm2_5,
+          pm10: aqi.data.list[0].components.pm10,
+          so2: aqi.data.list[0].components.so2,
+        },
       },
       forecasts: forecast.data.list
         .filter((_: any, index: number) => index % 8 === 0)

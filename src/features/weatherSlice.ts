@@ -18,10 +18,15 @@ const initialState: WeatherState = {
   cityErrors: {},
 };
 
+interface FetchWeatherParams {
+  city?: string;
+  location?: { lat: number; lon: number };
+}
+
 export const fetchWeatherForCity = createAsyncThunk(
   'weather/fetchWeatherForCity',
-  async (city: string) => {
-    const data = await fetchWeatherData(city);
+  async (params: FetchWeatherParams) => {
+    const data = await fetchWeatherData(params);
     return data;
   }
 );
@@ -42,23 +47,26 @@ const weatherSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchWeatherForCity.pending, (state, action) => {
-        const city = action.meta.arg;
-        state.loadingCities[city] = true;
-        state.cityErrors[city] = null;
+        const params = action.meta.arg;
+        const key = params.city || `${params.location?.lat},${params.location?.lon}`;
+        state.loadingCities[key] = true;
+        state.cityErrors[key] = null;
       })
       .addCase(fetchWeatherForCity.fulfilled, (state, action) => {
         const { currentWeather, forecasts, hourlyForecasts } = action.payload;
         const city = currentWeather.city;
-        state.loadingCities[city] = false;
-        state.cityErrors[city] = null;
-        state.currentWeather[city] = currentWeather;
-        state.forecasts[city] = forecasts;
-        state.hourlyForecasts[city] = hourlyForecasts;
+        const key = city;
+        state.loadingCities[key] = false;
+        state.cityErrors[key] = null;
+        state.currentWeather[key] = currentWeather;
+        state.forecasts[key] = forecasts;
+        state.hourlyForecasts[key] = hourlyForecasts;
       })
       .addCase(fetchWeatherForCity.rejected, (state, action) => {
-        const city = action.meta.arg;
-        state.loadingCities[city] = false;
-        state.cityErrors[city] = action.error.message || 'Failed to fetch weather data';
+        const params = action.meta.arg;
+        const key = params.city || `${params.location?.lat},${params.location?.lon}`;
+        state.loadingCities[key] = false;
+        state.cityErrors[key] = action.error.message || 'Failed to fetch weather data';
       });
   },
 });

@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import { store } from './features/store';
 import { validateEnvVars, config } from './config/env';
 import { GlobalStyles } from './styles/GlobalStyles';
-import { theme } from './styles/theme';
+import { lightTheme } from './styles/theme';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -19,7 +19,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={lightTheme}>
         <GlobalStyles />
         <GoogleOAuthProvider clientId={config.googleClientId}>
           <App />

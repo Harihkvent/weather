@@ -75,17 +75,21 @@ const SearchBar: React.FC = () => {
   const loadingCities = useAppSelector((state: RootState) => state.weather.loadingCities);
 
   useEffect(() => {
-    if (query.length >= 3) {
-      // For now, we'll directly search for the city when typed
-      // Later we can add city suggestions from a geocoding API
-      setSuggestions([query]);
-    } else {
-      setSuggestions([]);
-    }
+    const debounceTimer = setTimeout(() => {
+      if (query.length >= 3) {
+        // For now, we'll directly search for the city when typed
+        // Later we can add city suggestions from a geocoding API
+        setSuggestions([query]);
+      } else {
+        setSuggestions([]);
+      }
+    }, 500); // 500ms debounce delay
+
+    return () => clearTimeout(debounceTimer);
   }, [query]);
 
   const handleSearch = (city: string) => {
-    dispatch(fetchWeatherForCity(city));
+    dispatch(fetchWeatherForCity({ city }));
     setQuery('');
     setSuggestions([]);
   };

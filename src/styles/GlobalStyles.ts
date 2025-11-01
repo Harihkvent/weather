@@ -1,21 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
-  :root {
-    --primary-color: #4a90e2;
-    --secondary-color: #8884d8;
-    --error-color: #dc3545;
-    --success-color: #28a745;
-    --warning-color: #ffc107;
-    --text-primary: #333333;
-    --text-secondary: #666666;
-    --bg-primary: #ffffff;
-    --bg-secondary: #f5f5f5;
-    --transition-speed: 0.2s;
-    --border-radius: 10px;
-    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
   * {
     margin: 0;
     padding: 0;
@@ -24,16 +9,18 @@ export const GlobalStyles = createGlobalStyle`
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
+    background-color: ${({ theme }) => theme.colors.background.secondary};
+    color: ${({ theme }) => theme.colors.text.primary};
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: all 0.2s ease-in-out;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     line-height: 1.3;
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 
   button {
@@ -49,7 +36,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   a {
-    color: var(--primary-color);
+    color: ${({ theme }) => theme.colors.primary};
     text-decoration: none;
     
     &:hover {
@@ -64,15 +51,15 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
+    background: ${({ theme }) => theme.colors.background.secondary};
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--secondary-color);
+    background: ${({ theme }) => theme.colors.secondary};
     border-radius: 4px;
     
     &:hover {
-      background: var(--primary-color);
+      background: ${({ theme }) => theme.colors.primary};
     }
   }
 
@@ -88,10 +75,10 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   .fade-in {
-    animation: fadeIn var(--transition-speed) ease-in;
+    animation: fadeIn ${({ theme }) => theme.animations.duration} ease-in;
   }
 
   .slide-up {
-    animation: slideUp var(--transition-speed) ease-out;
+    animation: slideUp ${({ theme }) => theme.animations.duration} ease-out;
   }
 `;
