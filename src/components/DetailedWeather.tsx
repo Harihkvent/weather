@@ -18,32 +18,17 @@ import {
 import { useAppSelector } from '../hooks/redux';
 import { RootState } from '../features/store';
 
-// Local type definitions
-interface WeatherData {
+// Only keep the interfaces that are actually used in the component
+interface ChartDataPoint {
+  time: string;
   temperature: number;
-  humidity: number;
-  windSpeed: number;
-  pressure: number;
-  dewPoint: number;
-  uvIndex: number;
-  precipitation: number;
-}
-
-interface Forecast {
-  date: string;
-  icon: string;
-  temperature: number;
-  condition: string;
 }
 
 interface HourlyForecast {
   time: string;
   temperature: number;
-}
-
-interface ChartDataPoint {
-  time: string;
-  temperature: number;
+  // include optional additional fields that might be present in hourly data
+  [key: string]: any;
 }
 
 interface DetailedWeatherProps {
