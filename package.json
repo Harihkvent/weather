@@ -34,7 +34,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "serve": "serve -s build",
+    "build-and-serve": "npm run build && npm run serve"
   },
   "eslintConfig": {
     "extends": [
@@ -58,6 +60,7 @@
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.6.2",
     "react-scripts": "5.0.1",
+    "serve": "^14.2.5",
     "sharp": "^0.34.4",
     "source-map-explorer": "^2.5.3"
   }
