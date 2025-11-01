@@ -31,9 +31,14 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && node scripts/optimize-build.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -54,6 +59,11 @@
     ]
   },
   "devDependencies": {
-    "react-scripts": "^5.0.1"
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "prettier": "^3.6.2",
+    "react-scripts": "^5.0.1",
+    "sharp": "^0.34.4",
+    "source-map-explorer": "^2.5.3"
   }
 }

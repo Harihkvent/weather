@@ -1,5 +1,8 @@
-// Your Google OAuth Client ID
-export const GOOGLE_CLIENT_ID = '14409019261-4qmvgc6u6giaqcqmriejd2cbubvb6db5.apps.googleusercontent.com';
+if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
+  throw new Error('Google Client ID not found in environment variables');
+}
+
+export const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 // Scopes required for the application
 export const GOOGLE_SCOPES = [

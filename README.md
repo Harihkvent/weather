@@ -37,12 +37,17 @@ npm install
 ```
 
 3. Set up environment variables:
-   Create a `.env` file in the root directory and add:
-
-   ```env
-   REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id
-   REACT_APP_OPENWEATHER_API_KEY=your_openweather_api_key
-   ```
+   - Copy `.env.example` to `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Update the `.env` file with your API keys:
+     ```env
+     REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id
+     REACT_APP_OPENWEATHER_API_KEY=your_openweather_api_key
+     ```
+   
+   Note: Never commit the `.env` file to version control. It contains sensitive information and should be kept private.
 
 4. Start the development server:
 
