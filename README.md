@@ -1,16 +1,22 @@
 # Weather Dashboard
 
-A modern weather dashboard application built with React, Redux, and Google OAuth authentication. Get real-time weather updates, forecasts, and detailed analytics for multiple cities. This repository contains the frontend React app (TypeScript) plus configuration for deployments (Netlify / Vercel) and simple build optimization scripts.
+A modern weather dashboard application built with React, Redux, and Google OAuth authentication. Get real-time weather updates, forecasts, and detailed analytics for multiple cities, including air quality data and location-based weather information. This repository contains the frontend React app (TypeScript) plus configuration for deployments (Netlify / Vercel) and simple build optimization scripts.
 
 ## Features
 
-- 🌦 Real-time weather data display
-- 📊 Interactive weather visualizations using Recharts
+- 🌦 Real-time weather data display with automatic 5-minute updates
+- 📍 Location-based weather tracking using browser geolocation
+- � Air Quality Index (AQI) monitoring with visual indicators
+- �📊 Interactive weather visualizations using Recharts
 - 🔍 City search with suggestions
-- ⭐ Favorite cities management
+- ⭐ Favorite cities management with persistent storage
 - 🌡️ Temperature unit conversion (Celsius/Fahrenheit)
+- 🎨 Dark/Light theme support
 - 🔐 Google OAuth authentication
 - 📱 Responsive design for all devices
+- 🌅 Sunrise and sunset times
+- 🌬️ Detailed air quality metrics (PM2.5, PM10, etc.)
+- ⚡ Real-time updates and data persistence
 
 ## Technologies Used
 
@@ -20,6 +26,52 @@ A modern weather dashboard application built with React, Redux, and Google OAuth
 - Google OAuth for authentication
 - OpenWeatherMap API for weather data
 - Recharts for data visualization
+- Browser Geolocation API
+- LocalStorage for data persistence
+
+## Data Persistence
+
+The application maintains the following data locally:
+- User authentication state
+- Favorite cities
+- Theme preference (light/dark)
+- Temperature unit preference
+- Recent searches
+
+## Features in Detail
+
+### Weather Data
+- Real-time weather information
+- 5-day forecast
+- Hourly predictions
+- Air quality monitoring
+- UV index
+- Precipitation data
+- Wind speed and direction
+- Sunrise and sunset times
+
+### Air Quality Index (AQI)
+The application provides detailed air quality information:
+- Overall AQI score with color-coded indicators
+- PM2.5 and PM10 particle measurements
+- Individual pollutant levels (CO, NO2, O3, SO2)
+- Health recommendations based on AQI levels
+
+### Location Features
+- Automatic location detection
+- Manual city search
+- Favorite locations management
+- Multiple city monitoring
+- Location-based weather alerts
+
+### User Experience
+- Dark/Light theme support
+- Temperature unit conversion
+- Responsive design for all devices
+- Real-time data updates
+- Intuitive weather visualizations
+- Accessibility features
+- Offline support
 
 ## Getting Started
 
@@ -61,6 +113,15 @@ REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id_here
 
 Note: Do NOT commit your `.env` file. It contains secrets.
 
+### OpenWeather API Requirements
+
+This application uses the following OpenWeather API endpoints:
+- Current Weather Data
+- 5 Day / 3 Hour Forecast
+- Air Pollution Data
+
+Make sure your API key has access to these endpoints. You can check your subscription level and enable these services in your OpenWeather account.
+
 4. Start the development server:
 
 ```bash
@@ -85,8 +146,20 @@ npm run serve
 
 Additional helpful scripts in this repo:
 
-- `npm run serve` - Serve the production `build` directory locally (`serve -s build`).
-- `npm run build-and-serve` - Build then serve (convenience wrapper).
+- `npm run serve` - Serve the production `build` directory locally (`serve -s build`)
+- `npm run build-and-serve` - Build then serve (convenience wrapper)
+
+The application includes automatic optimization scripts that run during the build process:
+- Image optimization for better performance
+- Meta tag updates for SEO
+- Bundle size optimization
+
+Development features:
+- Hot reloading
+- TypeScript type checking
+- ESLint integration
+- Prettier code formatting
+- Environment variable validation
 
 ## Configuration
 
@@ -97,12 +170,39 @@ Additional helpful scripts in this repo:
 3. Enable Google OAuth API
 4. Create credentials (OAuth client ID)
 5. Add authorized JavaScript origins and redirect URIs
+6. Enable necessary scopes:
+   - profile
+   - email
 
 ### OpenWeatherMap API
 
 1. Sign up at [OpenWeatherMap](https://openweathermap.org/api)
-2. Get your API key
-3. Add it to your environment variables
+2. Subscribe to the necessary APIs:
+   - Current Weather Data
+   - 5 Day / 3 Hour Forecast
+   - Air Pollution API
+3. Get your API key
+4. Add it to your environment variables
+
+### Browser Permissions
+
+The application requires the following browser permissions:
+- Geolocation (for location-based weather)
+- Local Storage (for data persistence)
+- Notifications (for weather alerts)
+
+### Deployment Configurations
+
+The repository includes configuration files for:
+- Netlify (`netlify.toml`)
+- Vercel (`vercel.json`)
+- Development optimization (`scripts/optimize-build.js`)
+
+Security headers and CSP policies are preconfigured for:
+- XSS protection
+- Content Security Policy
+- Frame protection
+- Referrer Policy
 
 ## Contributing
 
