@@ -15,6 +15,7 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@types/react-router-dom": "^5.3.3",
+    "@types/recharts": "^1.8.29",
     "@types/styled-components": "^5.1.35",
     "axios": "^1.13.1",
     "firebase": "^12.5.0",
@@ -31,14 +32,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && node scripts/optimize-build.js",
+    "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
-    "prepare": "husky install"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -60,7 +56,6 @@
   },
   "devDependencies": {
     "eslint-config-prettier": "^10.1.8",
-    "husky": "^9.1.7",
     "prettier": "^3.6.2",
     "react-scripts": "^5.0.1",
     "sharp": "^0.34.4",

@@ -1,25 +1,50 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-  LineChart,
-  Line,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  AreaChart,
-  Area,
+  RadarChart,
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
   Radar,
-  RadarChart,
-  Legend,
+  Legend
 } from 'recharts';
-import { WeatherData, Forecast, HourlyForecast } from '../types/weather';
 import { useAppSelector } from '../hooks/redux';
 import { RootState } from '../features/store';
+
+// Local type definitions
+interface WeatherData {
+  temperature: number;
+  humidity: number;
+  windSpeed: number;
+  pressure: number;
+  dewPoint: number;
+  uvIndex: number;
+  precipitation: number;
+}
+
+interface Forecast {
+  date: string;
+  icon: string;
+  temperature: number;
+  condition: string;
+}
+
+interface HourlyForecast {
+  time: string;
+  temperature: number;
+}
+
+interface ChartDataPoint {
+  time: string;
+  temperature: number;
+}
 
 interface DetailedWeatherProps {
   city: string;
@@ -85,11 +110,6 @@ const DetailedWeather: React.FC<DetailedWeatherProps> = ({ city, onClose }) => {
   if (!weatherData || !forecasts || !hourlyForecasts) {
     return null;
   }
-
-interface ChartDataPoint {
-    time: string;
-    temperature: number;
-}
 
 const chartData: ChartDataPoint[] = hourlyForecasts.map((forecast: HourlyForecast): ChartDataPoint => ({
     time: forecast.time,
