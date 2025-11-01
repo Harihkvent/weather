@@ -45,26 +45,24 @@ const Button = styled.button`
   background: #8884d8;
   color: white;
   cursor: pointer;
-  
+
   &:hover {
     opacity: 0.8;
   }
 `;
 
-const SignOutButton = styled.button`
-  position: absolute;
-  top: 20px;
-  right: 100px;
-  padding: 8px 16px;
+const SignOutButton = styled(Button)`
   background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  margin-left: 0.5rem;
 
   &:hover {
     background-color: #c82333;
   }
+`;
+
+const Controls = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Dashboard: React.FC = () => {
@@ -110,18 +108,19 @@ const Dashboard: React.FC = () => {
     <Container>
       <Header>
         <h1>Weather Dashboard</h1>
-        <div>
+        <Controls>
           <Button onClick={() => setShowSettings(!showSettings)}>
             Settings
           </Button>
-        </div>
+          <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
+        </Controls>
       </Header>
 
       <SearchBar />
 
       {showSettings && <Settings />}
 
-      <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
+      
 
       {selectedCity ? (
         <DetailedWeather
