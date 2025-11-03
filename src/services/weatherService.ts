@@ -15,15 +15,17 @@ export const weatherApi = axios.create({
 interface WeatherParams {
   city?: string;
   location?: { lat: number; lon: number };
+  zipCode?: string;  // Add this new parameter
 }
 
-export const fetchWeatherData = async ({ city, location }: WeatherParams) => {
+export const fetchWeatherData = async ({ city, location, zipCode }: WeatherParams) => {
   try {
     // First get the weather data to get coordinates
     const current = await weatherApi.get('/weather', { 
       params: { 
         ...(city ? { q: city } : null),
         ...(location ? { lat: location.lat, lon: location.lon } : null),
+        ...(zipCode ? { zip: zipCode } : null),  // Add ZIP code support
         units: 'metric' 
       } 
     });
@@ -34,6 +36,7 @@ export const fetchWeatherData = async ({ city, location }: WeatherParams) => {
         params: { 
           ...(city ? { q: city } : null),
           ...(location ? { lat: location.lat, lon: location.lon } : null),
+          ...(zipCode ? { zip: zipCode } : null),  // Add ZIP code support
           units: 'metric' 
         } 
       }),
